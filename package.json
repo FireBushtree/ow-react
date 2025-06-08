@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js"
+    "build:dev": "rimraf dist && pnpm run build:react && pnpm run build:shared",
+    "build:react": "rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js",
+    "build:shared": "rollup --bundleConfigAsCjs --config scripts/rollup/shared.config.js"
   },
   "keywords": [],
   "author": "",
