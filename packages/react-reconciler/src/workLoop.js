@@ -1,10 +1,34 @@
 import { beginWork } from './beginWork'
 import { completeWork } from './completeWork'
+import { HostRoot } from './workTags'
+import { createWorkInProgress } from './fiber'
 
 let workInProgress = null
 
-function prepareFreshStack(fiber) {
-  workInProgress = fiber
+function prepareFreshStack(root) {
+  workInProgress = createWorkInProgress(root.current, {})
+}
+
+export function scheduleUpdateOnFiber(fiber) {
+  // 调度功能
+  const root = markUpdateFromFiberToRoot(fiber)
+  renderRoot(root)
+}
+
+function markUpdateFromFiberToRoot(fiber) {
+  let node = fiber
+  let parent = fiber.return
+
+  while (parent !== null) {
+    node = parent
+    parent = parent.return
+  }
+
+  if (node.tag === HostRoot) {
+    return node
+  }
+
+  return null
 }
 
 function renderRoot(root) {

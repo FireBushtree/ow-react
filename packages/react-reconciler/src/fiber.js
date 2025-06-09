@@ -20,6 +20,8 @@ export class FiberNode {
     // 作为工作单元
     this.pendingProps = pendingProps
     this.memoizedProps = null
+    this.memoizedState = null
+    this.updateQueue = null
 
     // 双缓冲技术 current 跟 workInProgress 交换
     // 用于标记另外一个树
@@ -28,4 +30,37 @@ export class FiberNode {
     // 副作用
     this.flags = NoFlags
   }
+}
+
+export class FiberRootNode {
+  constructor(container, hostRootFiber) {
+    this.container = container
+    this.current = hostRootFiber
+    hostRootFiber.stateNode = this
+    this.finishedWord = null
+  }
+}
+
+export const createWorkInProgress = (current, pendingProps) => {
+  let wip = current.alternate
+
+  if (wip === null) {
+    // mount
+    wip = new FiberNode(current.tag, pendingProps, current.key)
+    wip.stateNode = current.stateNode
+
+    wip.alternate = current
+    current.alternate = wip
+  } else {
+    // update
+    wip.pendingProps = pendingProps
+    wip.flags = NoFlags
+  }
+  wip.type = current.type
+  wip.updateQueue = current.updateQueue
+  wip.child = current.child
+  wip.memoizedProps = current.memoizedProps
+  wip.memoizedState = current.memoizedState
+
+  return wip
 }
