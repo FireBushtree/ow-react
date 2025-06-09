@@ -52,4 +52,32 @@ export function jsx(type, config, ...maybeChildren) {
   return ReactElement(type, key, ref, props)
 }
 
-export const jsxDEV = jsx
+export function jsxDEV(type, config) {
+  let key = null
+  let ref = null
+  const props = {}
+
+  for (const prop in config) {
+    const val = config[prop]
+    if (prop === 'key') {
+      if (val !== undefined) {
+        key = `${val}`
+      }
+
+      continue
+    }
+
+    if (prop === 'ref') {
+      if (val !== undefined) {
+        ref = val
+      }
+      continue
+    }
+
+    if ({}.hasOwnProperty.call(config, prop)) {
+      props[prop] = val
+    }
+  }
+
+  return ReactElement(type, key, ref, props)
+}
