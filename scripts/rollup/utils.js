@@ -2,12 +2,11 @@ import path, { dirname } from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
+import repalce from '@rollup/plugin-replace'
 import cjs from '@rollup/plugin-commonjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-
-console.log(__dirname, '======')
 
 const pkgPath = path.resolve(__dirname, '../../packages')
 const distPath = path.resolve(__dirname, '../../dist/node_modules')
@@ -26,6 +25,10 @@ export function getPackageJSON(pkgName) {
   return JSON.parse(str)
 }
 
-export function getBaseRollupPlugins() {
-  return [cjs()]
+export function getBaseRollupPlugins({
+  alias = {
+    __DEV__: true,
+  },
+}) {
+  return [repalce(alias), cjs()]
 }

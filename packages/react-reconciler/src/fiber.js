@@ -1,4 +1,5 @@
 import { NoFlags } from './fiberFlags'
+import { FunctionComponent, HostComponent } from './workTags'
 
 export class FiberNode {
   constructor(tag, pendingProps, key) {
@@ -63,4 +64,20 @@ export const createWorkInProgress = (current, pendingProps) => {
   wip.memoizedState = current.memoizedState
 
   return wip
+}
+
+export function createFiberFromElement(element) {
+  const { type, key, props } = element
+  let fiberTag = FunctionComponent
+
+  if (typeof type === 'string') {
+    // <div> type: 'div'
+    fiberTag = HostComponent
+  } else if (type !== 'function') {
+    console.warn('未定义的type类型', element)
+  }
+
+  const fiber = new FiberNode(fiberTag, props, key)
+  fiber.type = type
+  return fiber
 }
