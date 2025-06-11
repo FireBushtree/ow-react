@@ -43,6 +43,11 @@ function renderRoot(root) {
     }
     // eslint-disable-next-line no-constant-condition
   } while (true)
+
+  root.finishedWork = root.current.alternate
+
+  // wip fiberNode树 树中的flags
+  // commitRoot(root)
 }
 
 function workLoop() {

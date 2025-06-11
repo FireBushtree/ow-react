@@ -30,6 +30,7 @@ export class FiberNode {
 
     // 副作用
     this.flags = NoFlags
+    this.subtreeeFlags = NoFlags
   }
 }
 

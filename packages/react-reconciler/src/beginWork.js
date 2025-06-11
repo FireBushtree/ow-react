@@ -16,6 +16,8 @@ export const beginWork = (wip) => {
     default:
       break
   }
+
+  return null
 }
 
 function updateHostRoot(wip) {
