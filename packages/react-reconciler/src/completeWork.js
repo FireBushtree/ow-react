@@ -1,5 +1,5 @@
 import { HostComponent, HostRoot, HostText } from './workTags'
-import { appendInitialChild, createInstance, createTextInstance } from './hostConfig'
+import { appendInitialChild, createInstance, createTextInstance } from 'hostConfig'
 import { NoFlags } from './fiberFlags'
 
 /**
@@ -79,12 +79,12 @@ function bubbleProperties(wip) {
   let child = wip.child
 
   while (child !== null) {
-    subtreeFlags |= child.subtreeeFlags
+    subtreeFlags |= child.subtreeFlags
     subtreeFlags |= child.flags
 
     child.return = wip
     child = child.sibling
   }
 
-  wip.subtreeeFlags |= subtreeFlags
+  wip.subtreeFlags |= subtreeFlags
 }

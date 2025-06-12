@@ -2,7 +2,8 @@ import path, { dirname } from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-import repalce from '@rollup/plugin-replace'
+import replace from '@rollup/plugin-replace'
+import { nodeResolve } from '@rollup/plugin-node-resolve'
 import cjs from '@rollup/plugin-commonjs'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -29,6 +30,6 @@ export function getBaseRollupPlugins({
   alias = {
     __DEV__: true,
   },
-}) {
-  return [repalce(alias), cjs()]
+} = {}) {
+  return [replace(alias), nodeResolve()]
 }
