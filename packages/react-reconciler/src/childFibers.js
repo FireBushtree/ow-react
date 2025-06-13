@@ -12,6 +12,7 @@ function ChildReconcile(shouldTrackEffect) {
 
   function reconcileSingleTextNode(returnFiber, currentFiber, content) {
     const fiber = new FiberNode(HostText, { content }, null)
+    fiber.return = returnFiber
     return fiber
   }
 

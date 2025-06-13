@@ -39,7 +39,7 @@ export class FiberRootNode {
     this.container = container
     this.current = hostRootFiber
     hostRootFiber.stateNode = this
-    this.finishedWord = null
+    this.finishedWork = null
   }
 }
 

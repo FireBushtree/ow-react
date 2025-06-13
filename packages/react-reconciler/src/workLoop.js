@@ -3,6 +3,7 @@ import { completeWork } from './completeWork'
 import { HostRoot } from './workTags'
 import { createWorkInProgress } from './fiber'
 import { MutationMask, NoFlags } from './fiberFlags'
+import { commitMutationEffects } from './commitWork'
 
 let workInProgress = null
 
@@ -26,7 +27,7 @@ function markUpdateFromFiberToRoot(fiber) {
   }
 
   if (node.tag === HostRoot) {
-    return node
+    return node.stateNode
   }
 
   return null
@@ -72,7 +73,7 @@ function commitRoot(root) {
   if (subtreeHasEffect || rootHasEffect) {
     // 1. beforeMutation
     // 2. mutation Placement
-
+    commitMutationEffects(finishedWork)
     root.current = finishedWork
 
     // 3. layout
@@ -83,7 +84,7 @@ function commitRoot(root) {
 
 function workLoop() {
   while (workInProgress !== null) {
-    performUnitOfWork()
+    performUnitOfWork(workInProgress)
   }
 }
 

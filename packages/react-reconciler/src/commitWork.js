@@ -48,7 +48,9 @@ function commitPlacement(finishedWork) {
   const hostParent = getHostParent(finishedWork)
 
   // 找到finishedWork对应的dom
-  appendPlacementNodeIntoContainer(finishedWork, hostParent)
+  if (hostParent !== null) {
+    appendPlacementNodeIntoContainer(finishedWork, hostParent)
+  }
 }
 
 function getHostParent(fiber) {
@@ -68,11 +70,13 @@ function getHostParent(fiber) {
   if (__DEV__) {
     console.warn('未找到parent')
   }
+
+  return null
 }
 
 function appendPlacementNodeIntoContainer(finishedWork, hostParent) {
   if (finishedWork.tag === HostComponent || finishedWork.tag === HostText) {
-    appendChildToContainer(finishedWork.stateNode, hostParent)
+    appendChildToContainer(hostParent, finishedWork.stateNode)
     return
   }
 

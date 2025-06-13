@@ -6,7 +6,7 @@ import { scheduleUpdateOnFiber } from './workLoop'
 export function createContainer(container) {
   const hostRootFiber = new FiberNode(HostRoot, {}, null)
   const root = new FiberRootNode(container, hostRootFiber)
-  hostRootFiber.updateQueue = createUpdateQueue(root)
+  hostRootFiber.updateQueue = createUpdateQueue()
   return root
 }
 
