@@ -8,6 +8,7 @@ import { commitMutationEffects } from './commitWork'
 let workInProgress = null
 
 function prepareFreshStack(root) {
+  // 初始化 workInProgress
   workInProgress = createWorkInProgress(root.current, {})
 }
 
@@ -17,6 +18,9 @@ export function scheduleUpdateOnFiber(fiber) {
   renderRoot(root)
 }
 
+/**
+ * 从当然节点向上递归找到根节点
+ */
 function markUpdateFromFiberToRoot(fiber) {
   let node = fiber
   let parent = fiber.return

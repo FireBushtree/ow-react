@@ -20,6 +20,10 @@ export const beginWork = (wip) => {
   return null
 }
 
+/**
+ * 1. 计算状态的最新值
+ * 2. 创建子fiberNode
+ */
 function updateHostRoot(wip) {
   const baseState = wip.memoizedState
   const updateQueue = wip.updateQueue
