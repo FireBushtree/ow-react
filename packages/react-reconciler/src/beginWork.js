@@ -49,6 +49,7 @@ function reconcileChildren(wip, children) {
 
   if (current !== null) {
     // update
+    // 根据 节点逐步创建出 所有的 fibers
     wip.child = reconcileChildFibers(wip, current?.child, children)
   } else {
     // mount

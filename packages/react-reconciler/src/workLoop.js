@@ -7,11 +7,6 @@ import { commitMutationEffects } from './commitWork'
 
 let workInProgress = null
 
-function prepareFreshStack(root) {
-  // 初始化 workInProgress
-  workInProgress = createWorkInProgress(root.current, {})
-}
-
 export function scheduleUpdateOnFiber(fiber) {
   // 调度功能
   const root = markUpdateFromFiberToRoot(fiber)
@@ -37,19 +32,19 @@ function markUpdateFromFiberToRoot(fiber) {
   return null
 }
 
+function prepareFreshStack(root) {
+  // 初始化 workInProgress
+  workInProgress = createWorkInProgress(root.current, {})
+}
+
 function renderRoot(root) {
   prepareFreshStack(root)
 
-  do {
-    try {
-      workLoop()
-      break
-    } catch {
-      workInProgress = null
-    }
-    // eslint-disable-next-line no-constant-condition
-  } while (true)
-
+  try {
+    workLoop()
+  } catch {
+    workInProgress = null
+  }
   root.finishedWork = root.current.alternate
 
   // wip fiberNode树 树中的flags
