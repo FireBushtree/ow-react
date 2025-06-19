@@ -1,4 +1,4 @@
-import { HostComponent, HostRoot, HostText } from './workTags'
+import { FunctionComponent, HostComponent, HostRoot, HostText } from './workTags'
 import { appendInitialChild, createInstance, createTextInstance } from 'hostConfig'
 import { NoFlags } from './fiberFlags'
 
@@ -34,6 +34,9 @@ export const completeWork = (wip) => {
       bubbleProperties(wip)
       return null
     case HostRoot:
+      bubbleProperties(wip)
+      return null
+    case FunctionComponent:
       bubbleProperties(wip)
       return null
 

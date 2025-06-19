@@ -1,6 +1,7 @@
-import { HostComponent, HostRoot, HostText } from './workTags'
+import { FunctionComponent, HostComponent, HostRoot, HostText } from './workTags'
 import { processUpdateQueue } from './updateQueue'
 import { mountChildFibers, reconcileChildFibers } from './childFibers'
+import { renderWithHooks } from './fiberHooks'
 
 /**
  * 递归中的 递 阶段
@@ -13,11 +14,21 @@ export const beginWork = (wip) => {
       return updateHostComponent(wip)
     case HostText:
       return null
+    case FunctionComponent:
+      return updateFunctionComponent(wip)
     default:
       break
   }
 
   return null
+}
+
+function updateFunctionComponent(wip) {
+  const nextProps = wip.pendingProps
+  const nextChildren = renderWithHooks(wip, nextProps)
+
+  reconcileChildren(wip, nextChildren)
+  return wip.child
 }
 
 /**
