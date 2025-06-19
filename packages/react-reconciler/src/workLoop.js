@@ -14,7 +14,7 @@ export function scheduleUpdateOnFiber(fiber) {
 }
 
 /**
- * 从当然节点向上递归找到根节点
+ * 从当前节点向上递归找到根节点
  */
 function markUpdateFromFiberToRoot(fiber) {
   let node = fiber
@@ -64,18 +64,19 @@ function commitRoot(root) {
   // 重置
   root.finishedWork = null
 
-  // 判断 3 个字节段需要执行的操作
+  // 判断 3 个子阶段需要执行的操作
   // root flags root subtreeFlags
   const subtreeHasEffect = (finishedWork.subtreeFlags & MutationMask) !== NoFlags
   const rootHasEffect = (finishedWork.flags & MutationMask) !== NoFlags
 
   if (subtreeHasEffect || rootHasEffect) {
-    // 1. beforeMutation
+    // TODO 1. beforeMutation
+
     // 2. mutation Placement
     commitMutationEffects(finishedWork)
     root.current = finishedWork
 
-    // 3. layout
+    // TODO 3. layout
   } else {
     root.current = finishedWork
   }
