@@ -34,6 +34,7 @@ function commitMutationEffectsOnFiber(finishedWork) {
 
   if ((flags & Placement) !== NoFlags) {
     commitPlacement(finishedWork)
+    // 取消 effect 标记
     finishedWork.flags &= ~Placement
   }
 }

@@ -3,7 +3,7 @@ import { appendInitialChild, createInstance, createTextInstance } from 'hostConf
 import { NoFlags } from './fiberFlags'
 
 /**
- * 递归中的 递 阶段
+ * 递归中的 归 阶段
  */
 export const completeWork = (wip) => {
   const newProps = wip.pendingProps
