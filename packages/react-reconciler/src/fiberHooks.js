@@ -1,4 +1,6 @@
 import internals from 'shared/internals'
+import { createUpdate, createUpdateQueue, enqueueUpdate } from './updateQueue'
+import { scheduleUpdateOnFiber } from './workLoop'
 
 let currentlyRenderingFiber = null
 let workInProgressHook = null
@@ -24,18 +26,41 @@ export function renderWithHooks(wip) {
 }
 
 const HooksDispatcherOnMount = {
-  useState: mountState
+  useState: mountState,
+}
+
+function dispatchSetState(fiber, updateQueue, action) {
+  const update = createUpdate(action)
+  enqueueUpdate(updateQueue, update)
+  scheduleUpdateOnFiber(fiber)
 }
 
 function mountState(initialState) {
   // 找到当前 useState 对应的 hook数据
+  const hook = mountWorkInProgressHook()
+  let memoizedState
+
+  if (initialState instanceof Function) {
+    memoizedState = initialState()
+  } else {
+    memoizedState = initialState
+  }
+
+  const queue = createUpdateQueue()
+  hook.updateQueue = queue
+  hook.memoizedState = memoizedState
+
+  const dispatch = dispatchSetState.bind(null, currentlyRenderingFiber, queue)
+  queue.dispatch = dispatch
+
+  return [memoizedState, dispatch]
 }
 
 function mountWorkInProgressHook() {
   const hook = {
     memoizedState: null,
     updateQueue: null,
-    next: null
+    next: null,
   }
 
   if (workInProgressHook === null) {
@@ -49,5 +74,8 @@ function mountWorkInProgressHook() {
   } else {
     // 不是第一个 hook
     workInProgressHook.next = hook
+    workInProgressHook = hook
   }
+
+  return workInProgressHook
 }

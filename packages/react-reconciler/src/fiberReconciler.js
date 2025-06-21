@@ -13,6 +13,7 @@ export function createContainer(container) {
 export function updateContainer(element, root) {
   const hostRootFiber = root.current
   const update = createUpdate(element)
+  // 将当前 update 插入 update 队列
   enqueueUpdate(hostRootFiber.updateQueue, update)
   scheduleUpdateOnFiber(hostRootFiber)
 

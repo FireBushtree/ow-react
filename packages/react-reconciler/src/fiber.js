@@ -9,7 +9,7 @@ export class FiberNode {
     this.type = null
 
     // 构成树状结构
-    // 指向父fiberNode
+    // 指向父 fiberNode
     this.return = null
     // 右侧节点
     this.sibling = null

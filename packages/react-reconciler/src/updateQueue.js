@@ -9,6 +9,7 @@ export const createUpdateQueue = () => {
     shared: {
       pending: null,
     },
+    dispatch: null,
   }
 }
 
