@@ -30,7 +30,8 @@ export class FiberNode {
 
     // 副作用
     this.flags = NoFlags
-    this.subtreeeFlags = NoFlags
+    this.subtreeFlags = NoFlags
+    this.deletions = null
   }
 }
 
@@ -57,6 +58,7 @@ export const createWorkInProgress = (current, pendingProps) => {
     // update
     wip.pendingProps = pendingProps
     wip.flags = NoFlags
+    wip.deletions = null
   }
   wip.type = current.type
   wip.updateQueue = current.updateQueue

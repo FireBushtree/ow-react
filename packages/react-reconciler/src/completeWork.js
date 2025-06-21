@@ -1,6 +1,10 @@
 import { FunctionComponent, HostComponent, HostRoot, HostText } from './workTags'
 import { appendInitialChild, createInstance, createTextInstance } from 'hostConfig'
-import { NoFlags } from './fiberFlags'
+import { NoFlags, Update } from './fiberFlags'
+
+function markUpdate(fiber) {
+  fiber.flags |= Update
+}
 
 /**
  * 递归中的 归 阶段
@@ -26,6 +30,11 @@ export const completeWork = (wip) => {
     case HostText:
       if (current !== null && wip.stateNode) {
         // update
+        const oldText = current.memoizedProps.content
+        const newText = newProps.content
+        if (oldText !== newText) {
+          markUpdate(wip)
+        }
       } else {
         // 1. 构建DOM
         const instance = createTextInstance(newProps.content)
