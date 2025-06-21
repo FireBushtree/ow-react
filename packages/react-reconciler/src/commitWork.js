@@ -1,4 +1,4 @@
-import { MutationMask, NoFlags, Placement } from './fiberFlags'
+import { ChildDeletion, MutationMask, NoFlags, Placement, Update } from './fiberFlags'
 import { HostComponent, HostRoot, HostText } from './workTags'
 import { appendChildToContainer } from 'hostConfig'
 
@@ -36,6 +36,12 @@ function commitMutationEffectsOnFiber(finishedWork) {
     commitPlacement(finishedWork)
     // 取消 effect 标记
     finishedWork.flags &= ~Placement
+  }
+
+  if ((flags & Update) !== NoFlags) {
+    commitUpdate(finishedWork)
+    // 取消 effect 标记
+    finishedWork.flags &= ~Update
   }
 }
 
