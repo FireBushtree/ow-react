@@ -1,6 +1,6 @@
 import { ChildDeletion, MutationMask, NoFlags, Placement, Update } from './fiberFlags'
 import { HostComponent, HostRoot, HostText } from './workTags'
-import { appendChildToContainer } from 'hostConfig'
+import { appendChildToContainer, commitUpdate } from 'hostConfig'
 
 let nextEffect = null
 
