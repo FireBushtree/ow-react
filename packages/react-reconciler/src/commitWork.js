@@ -1,6 +1,6 @@
 import { ChildDeletion, MutationMask, NoFlags, Placement, Update } from './fiberFlags'
-import { HostComponent, HostRoot, HostText } from './workTags'
-import { appendChildToContainer, commitUpdate } from 'hostConfig'
+import { FunctionComponent, HostComponent, HostRoot, HostText } from './workTags'
+import { appendChildToContainer, commitUpdate, removeChild } from 'hostConfig'
 
 let nextEffect = null
 
@@ -42,6 +42,89 @@ function commitMutationEffectsOnFiber(finishedWork) {
     commitUpdate(finishedWork)
     // 取消 effect 标记
     finishedWork.flags &= ~Update
+  }
+
+  if ((flags & ChildDeletion) !== NoFlags) {
+    const deletions = finishedWork.deletions
+    if (deletions) {
+      deletions.forEach((childToDelete) => {
+        commitDeletion(childToDelete)
+      })
+    }
+  }
+}
+
+/**
+ *
+ * @param {*} childToDelete
+ *
+ * 触发 useEffect中的 unmount, 解绑 ref 等
+ */
+function commitDeletion(childToDelete) {
+  let rootHostNode = null
+
+  commitNestedComponent(childToDelete, (unmountFiber) => {
+    switch (unmountFiber.tag) {
+      case HostComponent:
+        if (rootHostComponent === null) {
+          rootHostComponent = unmountFiber
+        }
+
+        return
+
+      case HostText:
+        if (rootHostComponent === null) {
+          rootHostComponent = unmountFiber
+        }
+
+        return
+
+      case FunctionComponent:
+        // TODO useEffect中的 unmount
+        break
+
+      default:
+        break
+    }
+  })
+
+  if (rootHostNode !== null) {
+    const hostParent = getHostParent(childToDelete)
+    removeChild(rootHostNode, hostParent)
+  }
+
+  childToDelete.return = null
+  childToDelete.child = null
+}
+
+function commitNestedComponent(root, onCommitUnmount) {
+  let node = root
+  while (true) {
+    onCommitUnmount(node)
+
+    if (node.child !== null) {
+      // 向下遍历的过程
+      node.child.return = node
+      node = node.child
+      continue
+    }
+
+    if (node === root) {
+      // 中止条件
+      return
+    }
+
+    while (node.sibling === null) {
+      if (node.return === null || node.return === root) {
+        return
+      }
+
+      // 向上归的过程
+      node = node.return
+    }
+
+    node.sibling.return = node.return
+    node = node.sibling
   }
 }
 

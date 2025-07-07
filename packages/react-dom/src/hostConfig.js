@@ -32,3 +32,7 @@ export const commitUpdate = (fiber) => {
 export function commitTextUpdate(textInstance, content) {
   textInstance.textContent = content
 }
+
+export function removeChild(child, container) {
+  container.removeChild(child)
+}
