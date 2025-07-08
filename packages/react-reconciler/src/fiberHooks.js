@@ -24,6 +24,11 @@ export function renderWithHooks(wip) {
   const Component = wip.type
   const props = wip.pendingProps
   const children = Component(props)
+
+  // 重置操作
+  currentlyRenderingFiber = null
+  currentHook = null
+  workInProgressHook = null
   return children
 }
 

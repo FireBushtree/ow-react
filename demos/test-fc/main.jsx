@@ -6,7 +6,9 @@ function App() {
   window.setStr = setStr
 
   return <div>
-    <span>{str}</span>
+    {
+      str === 1 ? <span>demo</span> : <span>{str}</span>
+    }
   </div>
 }
 
