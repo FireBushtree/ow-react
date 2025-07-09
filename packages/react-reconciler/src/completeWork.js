@@ -1,6 +1,7 @@
 import { FunctionComponent, HostComponent, HostRoot, HostText } from './workTags'
 import { appendInitialChild, createInstance, createTextInstance } from 'hostConfig'
 import { NoFlags, Update } from './fiberFlags'
+import { updateFiberProps } from '../../react-dom/src/SyntheticEvent'
 
 function markUpdate(fiber) {
   fiber.flags |= Update
@@ -17,6 +18,9 @@ export const completeWork = (wip) => {
     case HostComponent:
       if (current !== null && wip.stateNode) {
         // update
+        // 1. props 是否会变化
+        // 2. 变了 update Flag
+        updateFiberProps(wip.stateNode, newProps)
       } else {
         // 1. 构建DOM
         const instance = createInstance(wip.type, newProps)

@@ -1,8 +1,10 @@
 import { HostText } from 'react-reconciler/src/workTags'
+import { updateFiberProps } from './SyntheticEvent'
 
 export const createInstance = (type, props) => {
   // TODO handle props
   const element = document.createElement(type)
+  updateFiberProps(element, props)
   return element
 }
 
@@ -21,6 +23,9 @@ export const commitUpdate = (fiber) => {
     case HostText:
       const text = fiber.memoizedProps.content
       return commitTextUpdate(fiber.stateNode, text)
+    case HostComponent:
+      // updateFiberProps()
+      return
     default:
       if (__DEV__) {
         console.log('还没实现的commit类型', fiber)
