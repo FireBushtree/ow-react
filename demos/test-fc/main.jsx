@@ -2,14 +2,19 @@ import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
 
 function App() {
-  const [str, setStr] = useState('owen react')
-  window.setStr = setStr
+  const [str, setStr] = useState(100)
 
-  return <div>
-    {
-      str === 1 ? <span>demo</span> : <span>{str}</span>
-    }
-  </div>
+  return (
+    <div>
+      <div
+        onClick={() => {
+          setStr(str + 1)
+        }}
+      >
+        { str }
+      </div>
+    </div>
+  )
 }
 
 createRoot(document.getElementById('root')).render(<App />)
