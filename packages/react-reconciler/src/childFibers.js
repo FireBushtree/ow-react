@@ -100,13 +100,81 @@ function ChildReconcile(shouldTrackEffect) {
     return fiber
   }
 
+  function reconcileChildrenArray(returnFiber, currentFirstChild, newChild) {
+    // 1. 将 current 保存在 map中
+    const existingChildren = new Map()
+    let current = currentFirstChild
+
+    while (current !== null) {
+      const keyToUse = current.key !== null ? current.key : current.index
+      existingChildren.set(keyToUse, current)
+      current = current.sibling
+    }
+
+    for (let i = 0; i < newChild.length; i++) {
+      // 2. 遍历 newChild, 寻找是否可复用
+      const after = newChild[i]
+
+      const newFiber = updateFromMap(returnFiber, existingChildren, i, after)
+
+      if (newFiber === null) {
+        continue
+      }
+
+      // 3. 标记移动还是插入
+    }
+
+    // 4. 将Map中剩下的标记删除
+  }
+
+  function updateFromMap(returnFiber, existingChildren, index, element) {
+    const keyToUse = element.key === null ? element.key : index
+    const before = existingChildren.get(keyToUse)
+
+    // HostText
+    if (typeof element === 'string' || typeof element === 'number') {
+      if (before) {
+        if (before.tag === HostText) {
+          existingChildren.delete(keyToUse)
+          return useFiber(before, { content: element + '' })
+        }
+      }
+
+      return new FiberNode(HostText, { content: element + '' })
+    }
+
+    // ReactElement
+    if (typeof element === 'object' && element !== null) {
+      switch (element.$$typeof) {
+        case REACT_ELEMENT_TYPE:
+          if (before) {
+            if (before.type === element.type) {
+              existingChildren.delete(keyToUse)
+              return useFiber(before, element.props)
+            }
+          }
+          return createFiberFromElement(element)
+      }
+
+      // TODO 数组类型
+      if (Array.isArray(element)) {
+      }
+    }
+
+    return null
+  }
+
   return function reconcileChildFibers(returnFiber, currentFiber, newChild) {
     if (typeof newChild === 'object' && newChild !== null) {
       switch (newChild.$$typeof) {
         case REACT_ELEMENT_TYPE:
           return placeSingleChild(reconcileSingleElement(returnFiber, currentFiber, newChild))
         default:
-          return
+          break
+      }
+
+      if (Array.isArray(newChild)) {
+        return reconcileChildrenArray(returnFiber, currentFiber, newChild)
       }
     }
 
