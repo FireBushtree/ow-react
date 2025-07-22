@@ -19,31 +19,50 @@ function ChildReconcile(shouldTrackEffect) {
     }
   }
 
+  function deleteRemainingChildren(returnFiber, currentFirstChild) {
+    if (!shouldTrackEffect) {
+      return
+    }
+
+    let childToDelete = currentFirstChild
+    while (childToDelete !== null) {
+      deleteChild(returnFiber, childToDelete)
+      childToDelete = childToDelete.sibling
+    }
+  }
+
   function reconcileSingleElement(returnFiber, currentFiber, element) {
     const key = element.key
 
-    if (currentFiber !== null) {
+    while (currentFiber !== null) {
       // update
 
       // 1. key 相同
       if (currentFiber.key === key) {
         if (element.$$typeof === REACT_ELEMENT_TYPE) {
+          // type 也相同
           if (currentFiber.type === element.type) {
             const existing = useFiber(currentFiber, element.props)
             // 更新父节点
             existing.return = returnFiber
+            // 当前节点可复用，标记剩下的节点可删除
+            deleteRemainingChildren(returnFiber, currentFiber.sibling)
             return existing
           }
 
+          // key 相同 type 不用 删除所有旧的
           deleteChild(returnFiber, currentFiber)
+          break
         } else {
           if (__DEV__) {
             console.warn('还未实现的 react 类型')
+            break
           }
         }
       } else {
-        // 删掉旧的
+        // key不同 删掉旧的
         deleteChild(returnFiber, currentFiber)
+        currentFiber = currentFiber.sibling
       }
     }
 
@@ -53,16 +72,18 @@ function ChildReconcile(shouldTrackEffect) {
   }
 
   function reconcileSingleTextNode(returnFiber, currentFiber, content) {
-    if (currentFiber !== null) {
+    while (currentFiber !== null) {
       // update
       if (currentFiber.tag === HostText) {
         const existing = useFiber(currentFiber, { content })
         // TODO 为什么需要重新标记父节点
         existing.return = returnFiber
+        deleteRemainingChildren(returnFiber, currentFiber.sibling)
         return existing
       }
 
       deleteChild(returnFiber, currentFiber)
+      currentFiber = currentFiber.sibling
     }
 
     const fiber = new FiberNode(HostText, { content }, null)
