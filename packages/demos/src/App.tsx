@@ -1,11 +1,9 @@
 function App() {
   return (
     <div className="card">
-      <p>
-        Edit <code>src/App.tsx</code> and save to test HMR
-      </p>
+      <p>123</p>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
