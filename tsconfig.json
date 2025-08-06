@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "target": "es2022",
+    "lib": ["dom", "ES2022"]
+  }
+}

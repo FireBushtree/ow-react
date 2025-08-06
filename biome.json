@@ -21,6 +21,9 @@
       "recommended": true,
       "style": {
         "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off"
       }
     }
   },
@@ -34,7 +37,8 @@
       "bracketSpacing": true,
       "bracketSameLine": false,
       "quoteStyle": "single",
-      "attributePosition": "auto"
+      "attributePosition": "auto",
+      "lineWidth": 80
     }
   },
   "assist": {
