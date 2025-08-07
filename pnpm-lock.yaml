@@ -63,6 +63,12 @@ importers:
 
   packages/react-dom: {}
 
+  packages/react-reconciler:
+    dependencies:
+      shared:
+        specifier: 'workspace: *'
+        version: link:../shared
+
   packages/shared: {}
 
 packages:
