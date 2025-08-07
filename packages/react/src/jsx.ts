@@ -22,11 +22,7 @@ const ReactElement = (type: Type, key: Key, ref: Ref, props: Props) => {
   return element
 }
 
-export const jsx = (
-  type: ElementType,
-  config: any,
-  ...maybeChildren: any[]
-) => {
+export const jsx = (type: ElementType, config: any) => {
   let key: Key = null
   let ref: Ref = null
   const props: Props = {}
@@ -49,19 +45,6 @@ export const jsx = (
 
     if (Object.hasOwn(config, prop)) {
       props[prop] = val
-    }
-  }
-
-  const maybeChildrenLength = maybeChildren.length
-
-  // props.children 有两种可能
-  // 1. 是一个对象
-  // 2. 是一个数组
-  if (maybeChildrenLength) {
-    if (maybeChildrenLength === 1) {
-      props.children = maybeChildren[0]
-    } else {
-      props.children = maybeChildren
     }
   }
 
